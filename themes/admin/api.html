@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{%block title %}API KEY設置 {% endblock %}
+{% block content %}
+<h3>APIKEY設置</h3>
+<form method="post" action="/a/api/" class="f">
+<fieldset>
+	{% for key in keys %}
+	<p>
+		{{key}} <a href="/a/api/remove/?key={{key}}">Remove</a>
+	</p>
+	{% endfor %}
+	<p>
+		<input type="submit" value="新增KEY">
+	</p>
+</fieldset>
+</form>
+{% endblock %}

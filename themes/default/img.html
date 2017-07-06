@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{%block title %}{{settings.name}}&gt;{{img.name}}-sa3album {% endblock %}
+{% block content %}
+<h2><a href="/">{{settings.name}}</a>&gt;<a href="{{img.album.url}}">{{img.album.name}}</a>&gt;{{img.name}}</h2>
+<div id="show">
+    <div id="left-side">
+    	<a href="{{img.f}}" target="_black" class="zoom">
+        <img src="{{img.f}}" alt="{{img.des}}" {{img.width|humimg_width:490}}/></a>
+		<p class="show-des">{{img.des}}</p>
+    <div id="code">
+       <div id="d_clip_button"></div> 
+       <p><label for="ishare1">發送給好友</label> <input id="ishare1" type="text" value="{{img.copyurl}}"/><button id="share1">複製</button></p>
+       <p><label for="ishare2">發送到博客</label> <input id="ishare2" type="text" value="&lt;img src=&quot;{{img.copyurl}}&quot;  /&gt;"/><button id="share2">複製</button></p>
+       <p><label for="ishare3">發送到論壇</label> <input id="ishare3" type="text" value="[img]{{img.copyurl}}[/img]"/><button id="share3">複製</button></p> 	
+    </div>
+    </div>
+	
+	<div id="right-side">
+		<dl>
+		<dt><strong>圖片信息</strong></dt>
+		<dd>文件類型:{{img.mime}}</dd>
+		<dd>分辨率:{{img.width}}*{{img.height}}</dd>
+		<dd>圖片大小:{{img.size|filesizeformat}}</dd>
+		<dd>上傳時間:{{img.created|humdate}}</dd>
+		<dd><a href="{{img.download_url}}" target="_blank">下載</a></dd>
+		{% if img.prev %}<dd><a href="{{img.prev.url}}">上一頁</a></dd> {% endif %}
+		{% if img.next %}<dd><a href="{{img.next.url}}">下一頁</a></dd> {% endif %}
+		</dl>
+	</div>	
+</div>
+<script type="text/javascript" src="/static/jquery-1.4.3.min.js"></script>
+<script type="text/javascript" src="/static/ZeroClipboard.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#code input").each(function(){
+            $(this).bind('click',function(){
+                $(this).select();
+            });
+        });
+    });
+	
+	$(window).load(function(){
+        $("#code button").each(function(){
+            var clip = new ZeroClipboard.Client();
+            var obj = this
+            clip.setText($(obj).prev().val()); 
+            clip.setHandCursor(true);
+            clip.addEventListener('complete', function(client, text) {
+                $(obj).prev().select();
+            });     
+            clip.glue($(obj).attr("id"));
+        });		
+	});
+	
+</script>
+{% endblock %}

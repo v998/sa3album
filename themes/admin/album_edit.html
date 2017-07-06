@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{%block title %}修改相冊-{{album.name}}{% endblock %}
+{% block content %}
+<h3>修改相冊-{{album.name}}</h3>
+<form method="post" action="/a/album/edit/" class="f">
+<fieldset>
+	<input name="key" type="hidden" value="{{key}}">
+	<p>
+		<input id="name" name="name" type="text" maxlength="100" value="{{album.name}}">
+		<label for="name" {% if error %} class="error" {% endif %}>名稱(必填)</label>
+	</p>
+	<p>
+		<input type="submit" value="保存">
+	</p>
+</fieldset>
+</form>
+{% endblock %}

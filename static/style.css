@@ -1,0 +1,126 @@
+* { 
+    margin:0;
+    padding:0;
+}
+
+body{
+	font-size:12px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight:bold;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+ul, ol {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+}
+
+a {
+	color:#0061E7;
+	text-decoration:none;
+}
+a:hover {
+	text-decoration:underline;
+}
+
+
+
+#main,#footer,#show{
+	margin:0 auto;
+	width:760px;
+	height:auto;
+	margin-top:15px;
+	background-color:#FFF;
+}
+
+#album-list {
+	width:720px;
+}
+
+#album-list li{
+	width:120px;
+	float:left;
+}
+
+#album-list img{
+	border:0 none;
+	width:110px;
+}
+
+#show img{
+	border:0 none;
+}
+
+#left-side{
+	width:500px;
+	float:left;
+}
+#right-side{
+	
+}
+
+#code {
+	padding:20px 0 0;
+}
+
+#code p{
+	padding:5px 0;
+}
+
+#code input {
+	color:#D9D9D9;
+	float:left;
+	font-family:"Courier New";
+	margin:0 3px 5px 0;
+	width:300px;
+}
+
+#code label {
+	cursor:pointer;
+	float:left;
+	width:80px;
+}
+
+#code button {
+	border:0 none;
+	cursor:pointer;
+	display:block;
+	height:23px;
+	margin:0;
+	overflow:hidden;
+	padding:0;
+	width:49px;
+}
+
+
+.info{
+	color:#999;
+}
+
+#footer{
+	clear:both;
+}
+
+.f12 {
+	font-size:12px;
+}
+
+.error {
+	color:red;
+}
+
+.page{
+	clear:both;
+}
+
+.show-des{
+	-moz-border-radius:3px 3px 3px 3px;
+	background-color:#F1980B;
+	color:#FFFFFF;
+	display:inline-block;
+	font-size:13px;
+	padding:0 8px;
+}

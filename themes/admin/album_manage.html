@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{%block title %}相冊管理 {% endblock %}
+{% block content %}
+<script type="text/javascript" src="/static/jquery-1.4.3.min.js"></script>
+<script type="text/javascript" src="/static/swfobject.js"></script>
+<script type="text/javascript" src="/static/ZeroClipboard.js"></script>
+
+<h2>查看 <a href="{{album.url}}" target="_blank">{{album.name}}</a> |去<a href="/a/upload/?album={{album.slug}}">上傳圖片</a></h2>
+{% if imgs %}
+<div id="img-list">
+<div class="thead">
+<table>
+    <tr>
+        <td class="t-select"><input class="allkeys" type="checkbox"></td>
+        <td class="t-img">圖片</td>
+		<td class="t-des-x">備註</td>
+        <td class="t-size">大小</td>
+        <td class="t-date">日期</td>
+        <td class="t-action">操作</td>
+    </tr>
+</table>
+</div>
+
+<div class="tbody">
+<table>
+	{% for img in imgs %}
+    <tr>
+        <td class="t-select"><input type="checkbox" class="s" title="{{img.copyurl}}" key="{{img.key.name}}"></td>
+        <td class="t-img"><img src="{{img.s}}" ></td>
+		<td class="t-des" id="i_{{img.key.name}}">{{img.description}}</td>
+        <td class="t-size">{{img.size|filesizeformat}}</td>
+        <td class="t-date">{{img.created|humdate}}</td>
+        <td class="t-action"><a href="#{{img.key.name}}" class="action-del">刪除</a>|
+		<a href="#{{img.key.name}}#{{album.key.name}}" class="action-cover">封面</a>
+		{% if settings.twitter_user %}|<a href="#{{img.key.name}}" class="action-share">分享</a> {% endif %}</td>
+    </tr>
+	{% endfor %}
+</table>
+</div>
+
+<div class="tfoot">
+<table>
+    <tbody>
+        <tr>
+            <td class="t-select"><input type="checkbox" class="allkeys"></td>
+			<td sytle="width:100px"><button id="t-copy">一鍵複製</button></td>
+			<td sytle="width:100px"><button id="t-ddd">一鍵刪除</button></td>
+			<td style="width:100px"></td>
+			<td style="width:250px;text-align:right;">
+			{% if prev %}<a href="?p={{prev}}">上一頁</a> {% endif %} 
+			{% for p in ps %}
+			{% ifequal p current_p %}
+			{{p}}
+			{% else %}
+			<a href="?p={{p}}">{{p}}</a> 
+			{% endifequal %}
+			{% endfor %}
+			{% if next %}<a href="?p={{next}}">下一頁</a> {% endif%}
+			</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+</div>
+{% else %}
+<h3>還沒有一張圖片哦，快去上傳吧 <a href="/a/upload/?album={{album.key.name}}">點我上傳</a></h3>
+{% endif %}
+<textarea id="copy_txt" style="display:none;" >{%if settings.copy_txt %}{{settings.copy_txt}}{% else %}{0}{% endif %}</textarea>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		//handler select all
+		$(".allkeys").each(function(){
+			$(this).bind('click',function(){
+				var b = $(this).attr('checked')
+				$(".s").each(function(){
+					$(this).attr("checked", b); 
+				});
+			});
+		});
+		function t_des_click_hanlder(obj){
+            var des = $(obj).html();
+            var id = $(obj).attr("id");
+            $(obj).html('<textarea id="d_'+ id +'">'+ des +'</textarea>');
+            
+            //remove click bind
+            $(obj).unbind('click');	
+			$("#d_"+id).focus();
+            $("#d_"+id).bind('blur',function(){
+                //post des
+                var des = $(this).val();
+                var key = id.replace('i_','');
+                $.ajax({
+                    url: '/a/img/updatedes/',
+                    data: ({'des':des,'key':key}),
+                    type: 'POST',
+                    success:function(msg){
+						obj = $("#"+id)
+                        obj.html(des);
+						
+                        obj.bind('click',function(){
+							t_des_click_hanlder(obj);
+						});
+                        $("#d_"+id).remove();
+                    },
+                });
+            });		
+		}
+		$(".t-des").each(function(){
+			$(this).bind('click',function(){
+				t_des_click_hanlder(this);
+			});
+		});
+		
+		//handler image click
+		$(".t-img").each(function(){
+			$(this).bind('click',function(){
+				var obj = $(this).prev().children().first()
+				var b = !obj.attr('checked');
+				obj.attr('checked',b);
+			});
+		});
+		
+		//handler del
+		$(".action-del").each(function(){
+			$(this).bind('click',function(){
+				var key=$(this).attr("href").replace("#","");
+				var obj = $(this).parent().parent();
+				$.ajax({
+					url: '/a/img/del/',
+					data:({'key':key}),
+					type: 'POST',
+					success:function(msg){
+						obj.remove();
+					}
+				});
+			});
+		});
+		
+		//handler tiwtter share
+		$(".action-share").each(function(){
+			$(this).bind('click',function(){
+				var key=$(this).attr("href").replace("#","");
+                $.ajax({
+                    url: '/a/twitter/update/',
+                    data:({'key':key}),
+                    type: 'POST',
+                    success:function(msg){
+                        alert('分享成功');
+                    }
+                });
+			});
+		});
+		
+		//handler cover
+		$(".action-cover").each(function(){
+			$(this).bind('click',function(){
+				var arr=$(this).attr("href").split("#");
+                var obj = $(this).parent().parent();
+				
+				$.ajax({
+					url: '/a/album/set/',
+					data: ({'album':arr[2],'img':arr[1]}),
+					type: 'POST',
+					success: function(msg){
+						alert(msg+" 已設置為封面");
+					}
+				});
+			});
+		});
+		
+		//handler del
+		$("#t-ddd").click(function(){
+			$(".s:checked").each(function(){
+				var arr = $(this).attr("title").split("/");
+				var key = arr[arr.length-2];
+				var obj = $(this).parent().parent();
+                $.ajax({
+                    url: '/a/img/del/',
+                    data:({'key':key}),
+                    type: 'POST',
+                    success:function(msg){
+                        obj.remove();
+                    }
+                });
+			});
+		});
+		
+		
+		
+    $(window).load(function(){
+        var clip = new ZeroClipboard.Client();
+        clip.setText("");
+        clip.setHandCursor(true);
+        clip.addEventListener('onMouseDown', function(client, text) {
+           var result = "";
+           var copy_txt = $("#copy_txt").val();
+           $(".s:checked").each(function(){
+		   	   key=$(this).attr("key");
+			   des = $("#i_"+key).html()
+               result = result + copy_txt.replace(/\{0\}/g,unescape($(this).attr("title"))).replace(/\{1\}/g,des) + "\n";
+           });
+           clip.setText(result);
+        }); 
+        clip.addEventListener('complete', function(client, text) {
+            alert("已經複製");
+        }); 
+        clip.glue("t-copy");      
+    });	
+		
+	});
+	
+</script>
+{% endblock %}

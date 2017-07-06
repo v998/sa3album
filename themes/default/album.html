@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{%block title %}{{settings.name}}&gt;{{album.name}}-sa3album {% endblock %}
+{% block meta %}
+<link rel="alternate" type="application/atom+xml" title="sa3album" href="/feed/{{album.key.name}}/" />
+{% endblock %}
+{% block content %}
+<h2><a href="/">{{settings.name}}</a>&gt;<a href="{{album.url}}">{{album.name}}</a><span class="info f12">({{album.count}})</span></h2>
+<ul id="album-list">
+{% for img in imgs %}
+<li><a href="{{img.url}}"><img src="{{img.s}}" alt="{{img.des}}"></a></li>
+{% endfor %}
+</ul>
+
+<h2 class="page">
+{% if prev %}<a href="?p={{prev}}">上一頁</a> {% endif %}
+{% for p in ps %}
+{% ifequal p current_p %}
+{{p}}
+{% else %}
+<a href="?p={{p}}">{{p}}</a> 
+{% endifequal %}
+{% endfor %}
+{% if next %}<a href="?p={{next}}">下一頁</a> {% endif%}</h2>
+{% endblock %}

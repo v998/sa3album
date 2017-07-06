@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[{{settings.name}}-sa3album]]></title>
+	<subtitle><![CDATA[sa3album 運行在GAE上的相冊程序]]></subtitle>
+	<id>{{settings.path}}/</id>
+    <link href="{{settings.path}}/" />
+    <link href="{{settings.path}}/feed/" rel="self" />
+    <updated>{{lastupdated|datetz:"Y-m-d\TH:i:s+08:00"}}</updated>
+	{% for img in imgs %}
+  <entry>
+      <link href="{{img.copyurl}}"/>
+      <id>{{img.copyurl}}</id>
+      <title><![CDATA[{{img.des|escape}}]]></title>
+      <content type="html"><![CDATA[
+       <a href="{{img.copyurl}}"><img src="{{img.copyurl}}?w=800" alt="{{img.des|escape}}" /></a>
+      ]]></content>
+	  <author>
+          <name>sa3album</name>
+          <uri>{{settings.path}}</uri>
+      </author>
+      <updated>{{img.created|datetz:"Y-m-d\TH:i:s+08:00"}}</updated>
+  </entry>
+{% endfor %}
+</feed>

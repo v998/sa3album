@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{%block title %}{{settings.name}}-sa3album {% endblock %}
+{% block meta %}
+<link rel="alternate" type="application/atom+xml" title="sa3album" href="/feed/" />
+{% endblock %}
+{% block content %}
+<ul id="album-list">
+<h2><a href="/">{{settings.name}}</a>&gt;相冊列表</h2>
+{% for album in albums %}
+<li>
+<dl>
+    <dt><a href="{{album.url}}"><img src="{{album.cover_url|default_album_img}}" alt="img.des"></a></dt>
+    <dd><a href="{{album.url}}">{{album.name}}</a></dd>
+    <dd><span class="info">{{album.count}}張照片</span></dd>
+</dl>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

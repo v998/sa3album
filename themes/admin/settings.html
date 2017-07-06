@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{%block title %}系統設置 {% endblock %}
+{% block content %}
+<h3>系統設置</h3>
+<form method="post" action="/a/settings/" class="f">
+<fieldset>
+	<p>
+		<input id="name" name="name" type="text" maxlength="100" value="{{settings.name}}">
+		<label for="name">網站名</label>
+	</p>
+	
+	<p>
+		<select name="theme-name" id="theme-name">
+	        {% for theme in themes %}
+	        <option value="{{theme}}" {% ifequal theme settings.theme %} selected="selected" {% endifequal %} >{{theme}}</option>
+	        {% endfor %}
+	    </select>
+		<label for="theme-name">模板</label>
+	</p>
+	
+	<p>
+        <input type="checkbox" name="is_check_md5" {% if settings.is_check_md5 %} checked="checked" {% endif %}>
+        <label for="is_check_md5">是否過濾重複圖片</label>
+	</p>
+	<p>
+		<input type="submit" value="保存">
+	</p>
+</fieldset>
+</form>
+
+<h3>Twitter設置</h3>
+<form method="post" action="/a/twitter/" class="f">
+<fieldset>
+	<p>{% if settings.twitter_user %}{{settings.twitter_user}}{% else %}還未登錄，快登錄吧{% endif%}</p>
+    <p>
+        <input type="submit" value="登錄twitter">
+    </p>
+</fieldset>
+</form>
+
+<h3>清除緩存</h3>
+<form method="post" action="/a/flush/" class="f">
+<fieldset>
+    <p>
+        <input type="submit" value="清除緩存">
+    </p>
+</fieldset>
+</form>
+{% endblock %}

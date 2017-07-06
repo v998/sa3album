@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{%block title %}{{settings.name}}&gt;{{album.name}}-sa3album {% endblock %}
+{% block meta %}
+<link rel="alternate" type="application/atom+xml" title="sa3album" href="/feed/{{album.key.name}}/" />
+{% endblock %}
+{% block content %}
+<div id="d">
+<h1><a href="/">{{settings.name}}</a>&gt;<a href="{{album.url}}">{{album.name}}</a><span class="info f12">({{album.count}})</span></h1>
+
+
+<!-- Start Advanced Gallery Html Containers -->
+<div id="gallery" class="content">
+    <div id="controls" class="controls"></div>
+	<div id="loading" class="loader"></div>
+	<div id="slideshow" class="slideshow"></div>
+    <div id="caption" class="caption-container"></div>
+</div>
+<div id="thumbs" class="navigation">
+    <ul class="thumbs noscript">
+    	{% for img in imgs %}
+        <li>
+            <a class="thumb" name="leaf" href="{{img.f}}?w=500" title="{{img.des}}" >
+                <img src="{{img.f}}?w=75&h=75" alt="{{img.des}}" />
+            </a>
+            <div class="caption">
+                <div class="download">
+                 <a href="{{img.copyurl}}" class="copy_url" target="_blank">查看原圖</a>   |<a href="{{img.download_url}}">下載</a>
+                </div>
+                <div class="image-title">{{img.des}} </div>
+                <div class="image-desc">
+                	<p>{{img.width}}*{{img.height}}({{img.size|filesizeformat}}) at {{img.created|humdate}} </p>
+				</div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div style="clear: both;"></div>
+</div>
+<script type="text/javascript" src="/static/ZeroClipboard.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        // We only want these styles applied when javascript is enabled
+        $('div.navigation').css({'width' : '300px', 'float' : 'left'});
+        $('div.content').css('display', 'block');
+
+        // Initially set opacity on thumbs and add
+        // additional styling for hover effect on thumbs
+	    var onMouseOutOpacity = 0.67;
+	    $('#thumbs ul.thumbs li').css('opacity', onMouseOutOpacity)
+	        .hover(
+	            function () {
+	                $(this).not('.selected').fadeTo('fast', 1.0);
+	            }, 
+	            function () {
+	                $(this).not('.selected').fadeTo('fast', onMouseOutOpacity);
+	            }
+	        );
+
+        
+        // Initialize Advanced Galleriffic Gallery
+        var gallery = $('#thumbs').galleriffic({
+            delay:                     2000,
+            numThumbs:                 15,
+            preloadAhead:              1,
+            enableTopPager:            true,
+            enableBottomPager:         true,
+            maxPagesToShow:            7,
+            imageContainerSel:         '#slideshow',
+            controlsContainerSel:      '#controls',
+            captionContainerSel:       '#caption',
+            loadingContainerSel:       '#loading',
+            renderSSControls:          true,
+            renderNavControls:         true,
+            playLinkText:              '播放',
+            pauseLinkText:             '暫停',
+            prevLinkText:              '&lsaquo; 前一張',
+            nextLinkText:              '下一張 &rsaquo;',
+            nextPageLinkText:          '下一頁 &rsaquo;',
+            prevPageLinkText:          '&lsaquo; 上一頁',
+            enableHistory:             false,
+            autoStart:                 false,
+            syncTransitions:           false,
+            onSlideChange:             function(prevIndex, nextIndex) {
+                // 'this' refers to the gallery, which is an extension of $('#thumbs')
+                this.find('ul.thumbs').children()
+                    .eq(prevIndex).fadeTo('fast', onMouseOutOpacity).end()
+                    .eq(nextIndex).fadeTo('fast', 1.0);
+            },
+            
+            onPageTransitionOut:       function(callback) {
+                this.fadeTo('fast', 0.0, callback);
+            },
+            onPageTransitionIn:        function() {
+                this.fadeTo('fast', 1.0);
+            }
+        });
+    });
+</script>
+{% endblock %}

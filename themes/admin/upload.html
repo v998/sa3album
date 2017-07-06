@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{%block title %}上傳圖片 {% endblock %}
+{% block content %}
+
+<script type="text/javascript" src="/static/jquery-1.4.3.min.js"></script>
+<script type="text/javascript" src="/static/swfobject.js"></script>
+<script type="text/javascript" src="/static/jquery.uploadify.v2.1.0.js"></script>
+
+<p>上傳到相冊:
+    <select name="album" id="album_select">
+    	{% for album in albums %}
+        <option value="{{album.slug}}" {% ifequal album.slug album_select%} selected="selected" {% endifequal %}>{{album.name}}({{album.count}})</option>
+		{% endfor %}
+    </select>
+    <a href="/a/album/add/">新建相冊</a>
+	<a href="/a/upload5/">嘗試html5上傳</a>
+	<a href="/a/g/">URL上傳</a>
+<p>
+	<input id="fileinput" name="fileinput" type="file" />
+    <input id="skey" name="skey" value="{{settings.skey}}" type="hidden">
+</p>
+
+<div>
+<div id="left-side">
+<div id="img-upload">
+    <div class="thead">
+        <table>
+           <colgroup>
+                <col class="file">
+                <col class="size">
+                <col class="remove">
+           </colgroup>
+           <tbody>
+            <tr>
+                <th class="file">文件</th>
+                <th class="size">大小</th>
+                <th class="remove">操作</th>
+            </tr>
+           </tbody>
+        </table>
+    </div>
+    <div class="tbody">
+        <table>
+            <colgroup>
+                <col class="file">
+                <col class="size">
+                <col class="remove">
+            </colgroup>
+           <tbody id="img-upload-list">
+
+           </tbody>
+        </table>
+    </div>
+    <div class="tfoot">
+        <table>
+            <tbody>
+                <tr>
+                    <td>共<span id="img-upload-count">0</span>個文件|<a href="javascript:$('#fileinput').uploadifyClearQueue();">清空列表</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p class="info">你可以上傳JPG，GIF，PNG或BMP文件，單個文件不超過10M</p>
+<textarea id="copy_txt" style="display:none;" >{%if settings.copy_txt %}{{settings.copy_txt}}{% else %}{0}{% endif %}</textarea>
+<p>
+	<input type="button" id="img-upload-btn" value="開始上傳" /> 
+	<input type="button" id="img-upload-cp" value="一鍵複製" />
+	<a href="#" id="img-upload-ac" style="display:none; font-size:16px;" ></a>
+</p>
+</div>
+<div id="right-side">
+	<form id="add-des" action="/a/img/updatedes/" style="display:none;">
+		<input type="hidden" name="key" id="file-key" value="">
+		<p><textarea id="des" name="des"></textarea></p>
+		<p><input type="submit" value="保存" id="add-des-submit"> <input type="button" value="取消" id="add-des-cancel" ></p>
+	</form>
+</div>
+</div>
+
+<script type="text/javascript" src="/static/ZeroClipboard.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		$("#fileinput").uploadify({
+			'uploader': '/static/uploadify.swf',
+			'script':'/u/',
+			'scriptData':{'skey':$("#skey").val()},
+			'cancelImg':'/static/trash.png',
+			'multi' : true,
+			'queueID': 'img-upload-list',
+			'sizeLimit':10000000,  //10M
+			'fileDesc':'請選擇圖片*.jpg;*.gif;*.png;*.jpeg;*.bmp',
+			'fileExt':'*.jpg;*.gif;*.png;*.jpge;*.bmp;',
+		});
+	   $("#img-upload-btn").click(function(){
+	   	   var album = $('#album_select option:selected').val();
+		   $("#fileinput").uploadifySettings('scriptData',{'album':album});
+	   	   $("#fileinput").uploadifyUpload();
+	   });
+
+	   $("#add-des-submit").click(function(){
+	   	   //submit data
+		   $.ajax({
+		   	  url: '/a/img/updatedes/',
+              data: $('#add-des').serialize(),
+              type: 'POST',
+			  success:function(msg){
+			     $("#add-des").hide();
+			  },
+           });
+		   //save data to act_id_[key].titel
+		   $("#act_id_"+$("#file-key").val()).attr("title",$("#des").val());
+		   return false;
+	   })
+	   
+	   $("#add-des-cancel").click(function(){
+	   	   $("#add-des").hide();
+		   return false;
+	   })
+	   
+
+    $(window).load(function(){
+        var clip = new ZeroClipboard.Client();
+        clip.setText("");
+        clip.setHandCursor(true);
+        clip.addEventListener('onMouseDown', function(client, text) {
+           var result = "";
+		   var copy_txt = $("#copy_txt").val();
+		   $(".f-list").each(function(){
+	           result = result + copy_txt.replace(/\{0\}/g,unescape($(this).val())) + "\n";
+		   });
+		   clip.setText(result);
+        }); 
+        clip.addEventListener('complete', function(client, text) {
+            alert("已經複製");
+        }); 
+        clip.glue("img-upload-cp");      
+    });
+	});
+	
+	function update_des(obj){
+		
+		if (!$('#add-des:hidden')[0]){
+			alert('請先保存!');
+			return false;
+		}
+		var key = $(obj).attr("href").replace('#','');
+		$("#file-key").val(key);
+		$("#add-des").show();
+		$("#des").val($(obj).attr("title"));
+		$("#des").focus();
+		return false;
+	}
+</script>
+{% endblock %}

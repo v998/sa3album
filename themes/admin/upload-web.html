@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{%block title %}Web地址上傳圖片 {% endblock %}
+{% block content %}
+<form method="get" action="/a/g/" class="f">
+<fieldset>
+    <p>
+        <input  name="u" type="text" style="width:400px;" maxlength="100" value="">
+        <label for="name">地址</label>
+    </p>
+    <p>
+        <input type="submit" value="保存">
+    </p>
+</fieldset>
+</form>
+{% endblock %}

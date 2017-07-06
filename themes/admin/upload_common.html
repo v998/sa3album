@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{%block title %}普通上傳 {% endblock %}
+{% block content %}
+<form method="post" action="/a/upload/common/" class="f" enctype="multipart/form-data">
+<fieldset>
+<p>上傳到相冊:
+    <select name="album">
+    	{% for album in albums %}
+        <option value="{{album.slug}}">{{album.name}}({{album.count}})</option>
+		{% endfor %}
+    </select>
+    <a href="/a/album/add/">新建相冊</a>
+</p>
+    <p>
+    	<input type="file" name="file" id="file" />
+    </p>
+    <p>
+        <input type="submit" value="上傳">
+    </p>
+</fieldset>
+</form>
+{% endblock %}

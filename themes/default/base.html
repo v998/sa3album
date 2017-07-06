@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset=utf-8"utf-8">
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel='stylesheet' href='/static/style.css' />
+		{% block meta %} {% endblock %}
+    </head>
+    <body>
+        <div id="main">
+			{% block content %}{% endblock %}
+        </div>
+		<div id="footer">
+                <p>Powered by <strong><a href="http://sa3.org/program/gae-album/" target="_blank" title="GAE 相冊 圖片">sa3album {{settings.version}}</a></strong> Hosted on Google App Engine.<a href="/login/">管理登陸</a></p>
+		</div>
+    </body>
+</html>

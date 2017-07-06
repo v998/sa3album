@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{%block title %}HTML5上傳圖片 {% endblock %}
+{% block content %}
+
+<script type="text/javascript" src="/static/jquery-1.4.3.min.js"></script>
+<link href="/static/fileuploader.css" rel="stylesheet" type="text/css" />
+<script src="/static/fileuploader.js" type="text/javascript"></script>
+
+
+<p>上傳到相冊:
+    <select name="album" id="album_select">
+    	{% for album in albums %}
+        <option value="{{album.slug}}" {% ifequal album.slug album_select%} selected="selected" {% endifequal %}>{{album.name}}({{album.count}})</option>
+		{% endfor %}
+    </select>
+    <a href="/a/album/add/">新建相冊</a>
+<div id="file-uploader">      
+    <noscript><p>Please enable JavaScript to use file uploader.</p></noscript>         
+</div>
+<div>
+<div id="left-side">
+<div id="img-upload">
+    <div class="thead">
+        <table>
+           <colgroup>
+                <col class="file">
+                <col class="size">
+                <col class="remove">
+           </colgroup>
+           <tbody>
+            <tr>
+                <th class="file">文件</th>
+                <th class="size">大小</th>
+                <th class="remove">操作</th>
+            </tr>
+           </tbody>
+        </table>
+    </div>
+    <div class="tbody">
+        <table>
+            <colgroup>
+                <col class="file">
+                <col class="size">
+                <col class="remove">
+            </colgroup>
+           <tbody id="qq-upload-list" class="qq-upload-list">
+
+           </tbody>
+        </table>
+    </div>
+    <div class="tfoot">
+        <table>
+            <tbody>
+                <tr>
+                    <td><a href="#" id="img-upload-clear">清空列表</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p class="info">你可以上傳JPG，GIF，PNG或BMP文件，單個文件不超過10M</p>
+<p>
+    <input type="button" id="img-upload-btn" value="開始上傳" /> 
+    <a href="#" id="img-upload-ac" style="display:none; font-size:16px;" ></a>
+</p>
+
+</div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+		//make ture support qq.UploadHandlerXhr.isSupported()
+        if(!qq.UploadHandlerXhr.isSupported()){
+			alert("您的瀏覽器不支持html5上傳");
+			window.location.href = "/a/upload/"
+            return;
+		}
+		
+        var uploader = new qq.FileUploader({
+            element: $("#file-uploader")[0],
+            action: '/a/upload5/',
+            allowedExtensions: ['jpg','jpeg','png','gif','bmp'],
+            sizeLimit:10000000,
+            minSizeLimit:1,
+			maxConnections:1,
+            onSubmit: function(id, fileName){},
+        });     
+		
+		$("#img-upload-btn").click(function(){
+			uploader.setParams({
+                'album': $('#album_select option:selected').val(), 
+            });
+			uploader.uploadBegin();
+		})
+		
+		$("#img-upload-clear").click(function(){
+			uploader.clearAll();
+			return false;
+		})
+    })
+</script>
+{% endblock %}

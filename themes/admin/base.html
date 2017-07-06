@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset=utf-8"utf-8">
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel='stylesheet' href='/static/style.css' />
+       <link rel='stylesheet' href='/static/admin.css' />
+    </head>
+    <body>
+        <div id="main">
+            <h2>
+            	<a href="/">首頁</a>|
+            	<a href="/a/album/">相冊管理</a>|
+				<a href="/a/upload/">圖片上傳</a>|
+				<a href="/a/settings/">系統設置</a>|
+				<a href="/a/antileech/">防盜鏈</a>|
+				<a href="/a/copy/">一鍵複製</a>|
+				<a href="/a/api/">API設置</a>|
+				<a href="/logout/">退出</a>
+			</h2>
+			{% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

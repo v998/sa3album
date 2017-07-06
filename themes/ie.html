@@ -1,0 +1,11 @@
+<html>
+<body>
+<script LANGUAGE="JavaScript">
+    var parent = window.external.menuArguments;
+    var url = parent.event.srcElement.getAttribute("src");
+    var target = "{{settings.path}}/a/g/?u="+encodeURIComponent(url);
+	window.open(target,'_blank','scrollbars=yes,width=600,height=450,left=75,top=50,op=20,status=no,resizable=yes');
+</script>
+</body>
+</html>
+

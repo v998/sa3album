@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{%block title %}相冊管理 {% endblock %}
+{% block content %}
+<ul id="album-list">
+	{{albums}}
+{% for album in albums %}
+<li>
+<dl>
+    <dt><a href="{{album.m_url}}"><img src="{{album.cover_url|default_album_img}}"></a></dt>
+    <dd><a href="{{album.m_url}}">{{album.name}}</a></dd>
+    <dd><span class="info">{{album.count}}張照片</span></dd>
+	<dd><a href="/a/album/edit/?key={{album.key}}">編輯</a>|<a href="/a/album/del/?key={{album.key}}">刪除</a></dd>
+</dl>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

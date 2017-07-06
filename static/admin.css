@@ -1,0 +1,148 @@
+.f p{
+    padding:5px 0 5px 0;
+}
+
+.f input,
+.f textarea{
+    border:1px dashed #666666;
+	font-size:16px;
+}
+
+.f fieldset{
+    border:0px;
+}
+
+
+/* upload  */
+
+#img-upload{
+	width:500px;
+}
+
+#img-upload table {
+	table-layout: fixed;
+    width: 100%;
+	text-align:left;
+	border-collapse:collapse;
+	border-spacing:0;
+}
+
+#img-upload col.file {
+	width:60%;
+}
+
+#img-upload col.size {
+	width:20%;
+}
+
+#img-upload th {
+	text-align:left;
+}
+#img-upload col.remove {
+	width:20%;
+}
+
+
+#img-list .thead,
+#img-upload .thead {
+    box-sizing: border-box;
+    padding-right: 20px;
+    top: 0;
+    color: #999;
+    background-color: #E4E4E4;
+}
+
+#img-list .tfoot,
+#img-upload .tfoot {
+    bottom: 0;
+    background-color: #E4E4E4;
+    font-weight: bold;
+}
+
+#img-list .tbody{
+	background-color: #FFF;
+}
+#img-upload .tbody {
+	border: 1px solid #E4E4E4;
+    height: 250px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: #FFF;
+}
+
+#img-list tr,
+#img-upload tr {
+	line-height:2em;
+}
+
+#img-upload th,#img-upload td{
+	padding: 0 10px;
+    border-bottom: 1px solid #E4E4E4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+#img-upload td.remove {
+	text-align:center;
+}
+
+#show_alert {
+	font-size:14px;
+}
+
+#right-side {
+	float:right;
+	width:250px;
+}
+
+#img-list textarea ,
+#add-des textarea{
+	background:none repeat scroll 0 0 #FFFFAA;
+	height:50px;
+	margin-bottom:5px;
+	width:100%;
+	border:1px solid #BDC7D8;
+	font-size:12px;
+	overflow:auto;
+	padding:3px;
+}
+
+/* img list */
+
+#img-list {
+	width:550px;
+}
+
+.t-select {
+	width:20px;
+	text-align:center;
+}
+
+.t-img {
+	width:75px;
+	text-align:center;
+}
+
+.t-img img{
+	width:50px;
+	height:50px;
+}
+.t-des-x,
+.t-des {
+	width:200px;
+}
+.t-size{
+	width:80px;
+	text-align:right;
+}
+
+.t-date{
+	width:80px;
+	text-align:right;
+}
+
+.t-action{
+	width:100px;
+	text-align:center;;
+}

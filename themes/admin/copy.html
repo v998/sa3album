@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{%block title %}一鍵複製設置 {% endblock %}
+{% block content %}
+<h3>一鍵複製設置|<a title="如何設置sa3album一鍵複製" rel="article" href="http://sa3.org/program/sa3album-copy/">如何設置sa3album一鍵複製</a></h3>
+<form method="post" action="/a/copy/" class="f">
+<fieldset>
+	<p>
+		<textarea name="copy_txt" rows=6 cols="100" >{{copy_txt}}</textarea>
+	</p>
+	<p>
+		<input type="submit" value="保存">
+	</p>
+</fieldset>
+</form>
+{% endblock %}

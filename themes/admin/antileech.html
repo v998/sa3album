@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{%block title %}防盜鏈 {% endblock %}
+{% block content %}
+<h3>防盜鏈|<a href="http://sa3.org/program/sa3album-antileech/">如何設置sa3album防盜鏈</a></h3>
+<form method="post" action="/a/antileech/" class="f">
+<fieldset>
+	<p>
+		<input type="checkbox" name="is_anti_leech" {% if settings.is_anti_leech %} checked="checked" {% endif %}>
+		<label for="is_anti_leech">是否啟用防盜鏈</label>
+    </p>
+	<p>
+		<strong>容許的網站規則設置</strong>
+	</p>
+	<p>
+		<textarea name="allow_list" rows=6 cols="100" >{{allow_list}}</textarea>
+	</p>
+	<p>
+        <input id="anti_leech_img" name="anti_leech_img" type="text" maxlength="100" value="{{settings.anti_leech_img}}">
+        <label for="anti_leech_img">需要替換的圖片的ID</label>		
+	</p>
+
+	<p>
+		<input type="submit" value="保存">
+	</p>
+</fieldset>
+</form>
+{% endblock %}
